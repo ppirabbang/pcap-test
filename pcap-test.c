@@ -50,6 +50,7 @@ void eth_parser(struct eth_header eth, const u_char* packet){
 		}
 
 		//소스맥 출력
+		printf("source mac address : ");
 		for(int i=0; i<6; i++){
 			printf("%02x:",eth.source_mac[i]);
 		}
@@ -57,6 +58,7 @@ void eth_parser(struct eth_header eth, const u_char* packet){
 		printf("\t");
 
 		//데스맥 출력
+		printf("destination mac address : ");
 		for(int i=0; i<6; i++){
 			printf("%02x:",eth.dst_mac[i]);
 		}
@@ -67,16 +69,16 @@ void ip_parser(struct ip_header *ip, const u_char* packet){
 	ip->ip_src = (uint8_t *)(packet + 14 + 12);
 	ip->ip_dst = (uint8_t *)(packet + 14 + 16);
 
-	printf("%d.%d.%d.%d\n", ip->ip_src[0],ip->ip_src[1],ip->ip_src[2],ip->ip_src[3]);
-	printf("%d.%d.%d.%d\n", ip->ip_dst[0],ip->ip_dst[1],ip->ip_dst[2],ip->ip_dst[3]);
+	printf("source ip address : %d.%d.%d.%d\n", ip->ip_src[0],ip->ip_src[1],ip->ip_src[2],ip->ip_src[3]);
+	printf("destination ip address : %d.%d.%d.%d\n", ip->ip_dst[0],ip->ip_dst[1],ip->ip_dst[2],ip->ip_dst[3]);
 }
 
 void tcp_parser(struct tcp_header tcp, const u_char* packet){
 	tcp.source_port = (uint8_t *)(packet + 34);
 	tcp.dst_port = (uint8_t *)(packet + 34 + 2);
 
-	printf("%d\n", ntohs(*(uint16_t *)tcp.source_port));
-	printf("%d\n", ntohs(*(uint16_t*)tcp.dst_port));
+	printf("source port : %d\n", ntohs(*(uint16_t *)tcp.source_port));
+	printf("destination port : %d\n", ntohs(*(uint16_t*)tcp.dst_port));
 }
 
 int main(int argc, char* argv[]) {
@@ -108,6 +110,8 @@ int main(int argc, char* argv[]) {
 		eth_parser(eth, packet);
 		ip_parser(&ip, packet);
 		tcp_parser(tcp, packet);
+
+		// 질문 : ip는 변경 안해도 되는데 tcp는 왜 변환해야 하나요?
 		/*
 		//소스맥, 데스맥 저장
 		for(int i=0; i<6; i++){
