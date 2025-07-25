@@ -79,6 +79,11 @@ void tcp_parser(struct tcp_header tcp, const u_char* packet){
 
 	printf("source port : %d\n", ntohs(*(uint16_t *)tcp.source_port));
 	printf("destination port : %d\n", ntohs(*(uint16_t*)tcp.dst_port));
+
+	for(int i=0; i<20; i++){
+		printf("%02x ", *(packet + 54 + i));
+	}
+	printf("\n");
 }
 
 int main(int argc, char* argv[]) {
